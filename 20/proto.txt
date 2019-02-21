@@ -1,0 +1,221 @@
+Alexs-MacBook-Air:20 alex$ cat ai_lab.txt 
+Паша
+Семен
+Вика
+Коля
+Роза
+Денис
+Alexs-MacBook-Air:20 alex$ cat py_lab.txt 
+Паша
+Семен
+Вика
+Коля
+Денис
+Юля
+Саша
+Alexs-MacBook-Air:20 alex$ cmp ai_lab.txt py_lab.txt 
+ai_lab.txt py_lab.txt differ: char 40, line 5
+Alexs-MacBook-Air:20 alex$ cmp -l ai_lab.txt py_lab.txt 
+40 240 224
+42 276 265
+44 267 275
+46 260 270
+47  12 321
+48 320 201
+49 224  12
+51 265 256
+53 275 273
+54 320 321
+55 270 217
+56 321  12
+57 201 320
+58  12 241
+cmp: EOF on ai_lab.txt
+Alexs-MacBook-Air:20 alex$ sort ai_lab.txt > ai_lab_sort.txt
+Alexs-MacBook-Air:20 alex$ sort py_lab.txt > py_lab_sort.txt
+Alexs-MacBook-Air:20 alex$ comm ai_lab_sort.txt p
+proto.txt        py_lab.txt       py_lab_sort.txt  
+Alexs-MacBook-Air:20 alex$ comm ai_lab_sort.txt py_lab_sort.txt 
+		Вика
+		Денис
+		Коля
+		Паша
+Роза
+	Саша
+		Семен
+	Юля
+Alexs-MacBook-Air:20 alex$ sudo diskutil unmount /dev/disk5
+Password:
+Volume XXI - Klavier on disk5 unmounted
+Alexs-MacBook-Air:20 alex$ dd if=/dev/disk5 of=rammstein.iso
+1091893+1 records in
+1091893+1 records out
+559049232 bytes transferred in 535.062071 secs (1044831 bytes/sec)
+Alexs-MacBook-Air:20 alex$ ls
+20.txt		ai_lab_sort.txt	proto.txt	py_lab_sort.txt	t.txt
+ai_lab.txt	l20-2012.pdf	py_lab.txt	rammstein.iso
+Alexs-MacBook-Air:20 alex$ mktemp py_lab.txt
+mktemp: mkstemp failed on py_lab.txt: File exists
+Alexs-MacBook-Air:20 alex$ mktemp secrets.XXXXXX
+secrets.O4ii6V
+Alexs-MacBook-Air:20 alex$ ls
+20.txt		ai_lab_sort.txt	proto.txt	py_lab_sort.txt	secrets.O4ii6V
+ai_lab.txt	l20-2012.pdf	py_lab.txt	rammstein.iso	t.txt
+Alexs-MacBook-Air:20 alex$ grep С ai_lab.txt 
+Семен
+Alexs-MacBook-Air:20 alex$ grep С py_lab.txt 
+Семен
+Саша
+Alexs-MacBook-Air:20 alex$ cat ai_lab_pass.txt 
+1. e4fggsd
+2. 4g4gEKM
+3. Modf868
+4. mjOjmod
+5. LHBO0jj
+6. xp97H0i
+Alexs-MacBook-Air:20 alex$ cat ai_lab_name.txt 
+1. Паша
+2. Семен
+3. Вика
+4. Коля
+5. Роза
+6. Денис
+Alexs-MacBook-Air:20 alex$ join ai_lab_name.txt ai_lab_pass.txt | tee ai_lab_passlist.txt
+1. Паша e4fggsd
+2. Семен 4g4gEKM
+3. Вика Modf868
+4. Коля mjOjmod
+5. Роза LHBO0jj
+6. Денис xp97H0i
+Alexs-MacBook-Air:20 alex$ cat ai_lab_passlist.txt 
+1. Паша e4fggsd
+2. Семен 4g4gEKM
+3. Вика Modf868
+4. Коля mjOjmod
+5. Роза LHBO0jj
+6. Денис xp97H0i
+Alexs-MacBook-Air:20 alex$ tail -n 4 ai_lab_name.txt 
+3. Вика
+4. Коля
+5. Роза
+6. Денис
+Alexs-MacBook-Air:20 alex$ echo "i'm gonna rise" | tr "[:lower:]" "[:upper:]"
+I'M GONNA RISE
+Alexs-MacBook-Air:20 alex$ cat mt_lab.txt 
+Коля
+Маша
+Паша
+Люба
+Саша
+Мотвей
+Вера
+Коля
+Alexs-MacBook-Air:20 alex$ sort mt_lab.txt | uniq
+Вера
+Коля
+Люба
+Маша
+Мотвей
+Паша
+Саша
+Alexs-MacBook-Air:20 alex$ od mt_lab.txt 
+0000000    115320  137320  135720  107721  150012  150234  150660  150210
+0000020    005260  117720  130320  104321  130320  150012  150633  150216
+0000040    150261  005260  120720  130320  104321  130320  150012  150234
+0000060    150676  150202  150262  150265  005271  111320  132720  100321
+0000100    130320  150012  150232  150276  150673  005217                
+0000114
+Alexs-MacBook-Air:20 alex$ cp mt_lab.txt mt22.txt
+Alexs-MacBook-Air:20 alex$ sum mt_lab.txt 
+58370 1 mt_lab.txt
+Alexs-MacBook-Air:20 alex$ sum mt22.txt 
+58370 1 mt22.txt
+Alexs-MacBook-Air:20 alex$ cut -c 4-10 ai_lab_name.txt 
+Паша
+Семен
+Вика
+Коля
+Роза
+Денис
+Alexs-MacBook-Air:20 alex$ gzip ai_lab_passlist.txt > ai_l.gz
+Alexs-MacBook-Air:20 alex$ ls
+20.txt			ai_lab_pass.txt		mt22.txt		py_lab_sort.txt
+ai_l.gz			ai_lab_passlist.txt.gz	mt_lab.txt		rammstein.iso
+ai_lab.txt		ai_lab_sort.txt		proto.txt		secrets.O4ii6V
+ai_lab_name.txt		l20-2012.pdf		py_lab.txt
+Alexs-MacBook-Air:20 alex$ diff  ai_lab_sort.txt py_lab_sort.txt 
+5c5
+< Роза
+---
+> Саша
+6a7
+> Юля
+Alexs-MacBook-Air:20 alex$ ls
+20.txt		ai_lab_name.txt	diff.txt	l20-2012.pdf	py_lab.txt	split.txt
+ai_lab.txt	ai_lab_sort.txt	find.txt	proto.txt	py_lab_sort.txt
+Alexs-MacBook-Air:20 alex$ find . -name "ai_*"
+./ai_lab_name.txt
+./ai_lab_sort.txt
+./ai_lab.txt
+Alexs-MacBook-Air:20 alex$ ls -lh
+total 456
+-rw-r--r--  1 alex  staff    72K Feb 13 19:24 20.txt
+-rw-r--r--@ 1 alex  staff    58B Feb 13 17:05 ai_lab.txt
+-rw-r--r--@ 1 alex  staff    76B Feb 13 18:00 ai_lab_name.txt
+-rw-r--r--  1 alex  staff    58B Feb 13 20:03 ai_lab_sort.txt
+-rwxr-xr-x@ 1 alex  staff   4.0K Jun 26  2018 diff.txt
+-rwxr-xr-x@ 1 alex  staff   5.5K Jun 26  2018 find.txt
+-rw-r--r--@ 1 alex  staff   103K Feb 13 16:36 l20-2012.pdf
+-rw-r--r--@ 1 alex  staff   4.1K Feb 13 20:12 proto.txt
+-rw-r--r--@ 1 alex  staff    66B Feb 13 20:00 py_lab.txt
+-rw-r--r--@ 1 alex  staff    65B Feb 13 17:06 py_lab_sort.txt
+-rwxr-xr-x@ 1 alex  staff   4.0K Jun 26  2018 split.txt
+Alexs-MacBook-Air:20 alex$ split -b 10K l20-2012.pdf 
+split: 10K: illegal byte count
+Alexs-MacBook-Air:20 alex$ split -b 10000 l20-2012.pdf 
+Alexs-MacBook-Air:20 alex$ ls -lh
+total 712
+-rw-r--r--  1 alex  staff    72K Feb 13 19:24 20.txt
+-rw-r--r--@ 1 alex  staff    58B Feb 13 17:05 ai_lab.txt
+-rw-r--r--@ 1 alex  staff    76B Feb 13 18:00 ai_lab_name.txt
+-rw-r--r--  1 alex  staff    58B Feb 13 20:03 ai_lab_sort.txt
+-rwxr-xr-x@ 1 alex  staff   4.0K Jun 26  2018 diff.txt
+-rwxr-xr-x@ 1 alex  staff   5.5K Jun 26  2018 find.txt
+-rw-r--r--@ 1 alex  staff   103K Feb 13 16:36 l20-2012.pdf
+-rw-r--r--@ 1 alex  staff   4.1K Feb 13 20:12 proto.txt
+-rw-r--r--@ 1 alex  staff    66B Feb 13 20:00 py_lab.txt
+-rw-r--r--@ 1 alex  staff    65B Feb 13 17:06 py_lab_sort.txt
+-rwxr-xr-x@ 1 alex  staff   4.0K Jun 26  2018 split.txt
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xaa
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xab
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xac
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xad
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xae
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xaf
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xag
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xah
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xai
+-rw-r--r--  1 alex  staff   9.8K Feb 13 20:20 xaj
+-rw-r--r--  1 alex  staff   5.8K Feb 13 20:20 xak
+Alexs-MacBook-Air:20 alex$ cat x* > pdfcopy.pdf
+Alexs-MacBook-Air:20 alex$ ls
+20.txt		diff.txt	proto.txt	xaa		xae		xai
+ai_lab.txt	find.txt	py_lab.txt	xab		xaf		xaj
+ai_lab_name.txt	l20-2012.pdf	py_lab_sort.txt	xac		xag		xak
+ai_lab_sort.txt	pdfcopy.pdf	split.txt	xad		xah 
+Alexs-MacBook-Air:20 alex$ ed
+Hello there!
+?
+a
+Hello there! 
+I was created in the ed.     
+What a plesure~ 
+.
+w ed.txt
+55
+q
+Alexs-MacBook-Air:20 alex$ cat ed.txt
+Hello there! 
+I was created in the ed.
+What a plesure~
+Alexs-MacBook-Air:20 alex$ 
