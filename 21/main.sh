@@ -7,14 +7,13 @@ read path
 
 if [ -r $path ]
 then
-    continue 
+    echo ""
+    echo "Start conf:"
 else
     echo "Файла $path не существует"
     exit
 fi
 
-echo ""
-echo "Start conf:"
 countConf=1
 
 for Conf in $(cat config.conf | awk -F"=" '{ print $1; }')
@@ -45,18 +44,18 @@ echo "startnlet - изменения номера с которого начне
 echo "clone - для начала процесса клонирования"
 echo ""
 
-while read Upref
+while read Upref arg
 do
     case "$Upref" in
-        path) read path
+        path) path=$arg
         echo "path = $path";;
-        type) read type
+        type) type=$arg
         echo "type = $type";;
-        number) read number
+        number) number=$arg
         echo "number = $number";;
-        startnum) read startnum
+        startnum) startnum=$arg
         echo "startnum = $startnum";;
-        startlet) read startlet
+        startlet) startlet=$arg
         echo "startlet = $startlet";;
         clone) break;;
         *) echo "Неизвестная команда.";;
@@ -69,16 +68,16 @@ do
 
     if [ $type = $LET ]
     then
-        if [ $startlet = $(echo "$startlet" | tr "a-yA-Y" "b-zB-Z")]
+        if [ $startlet = $(echo "$startlet" | tr "a-yA-Y" "b-zB-Z") ]
         then
             echo "Maximum amount of letter-type clones"
             break
         fi
-        cp $path $path'_'$startlet
+        cp $path $(echo "$path" | awk -F"." '{ print $1; }')'_'$startlet'.'$(echo "$path" | awk -F"." '{ print $2; }')
         startlet=$(echo "$startlet" | tr "a-yA-Y" "b-zB-Z")
     elif [ $type = $NUM ]
     then
-        cp $path $path'_'$(($startnum + $i))
+        cp $path $(echo "$path" | awk -F"." '{ print $1; }')'_'$startnum'.'$(echo "$path" | awk -F"." '{ print $2; }')
     fi
 
 done
