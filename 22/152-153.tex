@@ -1,14 +1,51 @@
-\documentclass{article}
+\documentclass[twoside, a4paper,11pt]{report}
+\usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc} 
-\usepackage[english, russian]{babel} 
+\usepackage[english, russian]{babel}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
 
-\begin{document}   
-от непрерывной функции. Следовательно,
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headheight}{14pt}
+
+\fancyhf{} 
+\fancyhead[R]{77}
+\fancyhead[L]{yz}
+\fancyhead[C]{hello my dear friend}
+
+
+
+
+
+
+\setlength{\parindent}{10mm}
+\makeatletter
+% Переопределение команды секции
+\renewcommand{\section}{\@startsection{section}{1}%
+{\parindent}{3.25ex plus 1ex minus .2ex}%
+{1.5ex plus .2ex}{\bfseries\large}}
+
+% Переопределение команды подсекции
+\renewcommand{\subsection}{\@startsection{subsection}{2}%
+{\parindent}{3.25ex plus 1ex minus .2ex}%
+{1.5ex plus .2ex}{\bfseries}}
+\makeatother
+
+\begin{document}
+\pagestyle{fancy} 
+
+
+\noindent от непрерывной функции. Следовательно,
 $$
-\cos
+\sum ^{i}_{n=2}=\dfrac {\left( 36\right) }{\left( 2-3\right) ^{\left( 2+6\right) }}
 $$
 
     Рассмотрим задачу минимизации первого, главного
 члена выражения (4). Для удобство решения уравнения 
 Эйлера примем за независимую переменную функцию   
-\end{document}	
+
+\subsection*{\S 10. Примеры оптимизации распределения узлов}
+Рассмотрим пример решения уравнения (9.6)
+
+\end{document}
