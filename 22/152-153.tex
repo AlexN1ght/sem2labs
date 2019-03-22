@@ -1,22 +1,23 @@
-\documentclass[twoside, a4paper,11pt]{report}
+\documentclass[twoside]{article}
+\usepackage[14pt]{extsizes}
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc} 
 \usepackage[english, russian]{babel}
+\usepackage[a4paper, left=40mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage{lipsum}
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-\renewcommand{\headheight}{14pt}
+\setlength{\headheight}{14pt}
+\fontdimen2\font=1.4ex
 
 \fancyhf{} 
-\fancyhead[R]{77}
-\fancyhead[L]{yz}
-\fancyhead[C]{hello my dear friend}
-
-
-
-
+\fancyhead[LO,RE]{\thepage}
+\fancyhead[LE]{\S 10}
+\fancyhead[RO]{ГЛ. 3}
+\fancyhead[C]{ЧИСЛЕННОЕ ИНТЕГРИРОВАНИЕ}
 
 
 \setlength{\parindent}{10mm}
@@ -38,12 +39,27 @@
 
 \noindent от непрерывной функции. Следовательно,
 $$
-\sum ^{i}_{n=2}=\dfrac {\left( 36\right) }{\left( 2-3\right) ^{\left( 2+6\right) }}
+\overline {r}=\dfrac {1}{N^{2}}\left( \int ^{1}_{0}\left( \varphi '\left( t\right) \right) ^{3}\dfrac {F\left( \varphi \left( t\right) \right) }{12}dt\right) +o\left( \dfrac {1}{N^{2}}\right).\eqno(4)\
 $$
 
     Рассмотрим задачу минимизации первого, главного
 члена выражения (4). Для удобство решения уравнения 
-Эйлера примем за независимую переменную функцию   
+Эйлера примем за независимую переменную функцию $\varphi$.
+Тогда коэффициент при $\dfrac {1}{N^{2}}$ в главном члене погрешности
+запишется в виде 
+$$
+\int ^{1}_{0}\left( t'\left( \varphi \right) \right) ^{-2}\dfrac {F\left( \varphi \right) }{12}d\varphi ,\\
+$$
+Уравнение  Эйлера для функции, минимизирующей функционал
+$$
+\int ^{1}_{0}\left( t'\left( \varphi \right) \right) ^{-2}\dfrac {F\left( \varphi \right) }{12}d\varphi ,\\
+$$
+имеет вид
+$$
+\dfrac {d}{d\varphi }\left( \dfrac {\partial G}{\partial t'}\right) -\dfrac {\partial G}{\partial t}=0.\eqno(5)
+$$
+Уравнение  Эйлера для функции, минимизирующий функционал
+
 
 \subsection*{\S 10. Примеры оптимизации распределения узлов}
 Рассмотрим пример решения уравнения (9.6)
