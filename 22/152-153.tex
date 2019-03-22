@@ -3,21 +3,28 @@
 \usepackage[T1,T2A]{fontenc}
 \usepackage[utf8]{inputenc} 
 \usepackage[english, russian]{babel}
-\usepackage[a4paper, left=40mm, right=20mm, top=20mm, bottom=20mm]{geometry}
+\usepackage[a4paper, left=25mm, right=35mm, top=20mm, bottom=30mm]{geometry}
 \usepackage{lipsum}
 \usepackage{amsmath}
 \usepackage{fancyhdr}
+
+\newcommand{\RNumb}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
 
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\headheight}{14pt}
 \fontdimen2\font=1.4ex
+\linespread{0.8}
+\sloppy
+
+\setcounter{page}{152}
 
 \fancyhf{} 
-\fancyhead[LO,RE]{\thepage}
-\fancyhead[LE]{\S 10}
-\fancyhead[RO]{ГЛ. 3}
-\fancyhead[C]{ЧИСЛЕННОЕ ИНТЕГРИРОВАНИЕ}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\S 10}
+\fancyhead[RE]{ГЛ. \RNumb{3}}
+\fancyhead[CE]{ЧИСЛЕННОЕ ИНТЕГРИРОВАНИЕ}
+\fancyhead[CO]{ПРИМЕРЫ ОПТИМИЗАЦИИ РАСПРЕДЕЛЕНИЯ УЗЛОВ}
 
 
 \setlength{\parindent}{10mm}
@@ -48,20 +55,74 @@ $$
 Тогда коэффициент при $\dfrac {1}{N^{2}}$ в главном члене погрешности
 запишется в виде 
 $$
-\int ^{1}_{0}\left( t'\left( \varphi \right) \right) ^{-2}\dfrac {F\left( \varphi \right) }{12}d\varphi ,\\
+\int ^{1}_{0}\left( t'\left( \varphi \right) \right) ^{-2}\dfrac {F\left( \varphi \right) }{12}d\varphi .
 $$
 Уравнение  Эйлера для функции, минимизирующей функционал
 $$
-\int ^{1}_{0}\left( t'\left( \varphi \right) \right) ^{-2}\dfrac {F\left( \varphi \right) }{12}d\varphi ,\\
+\int ^{1}_{0}G\left( \varphi ,t,t'\right) d\varphi ,
 $$
 имеет вид
 $$
 \dfrac {d}{d\varphi }\left( \dfrac {\partial G}{\partial t'}\right) -\dfrac {\partial G}{\partial t}=0.\eqno(5)
 $$
-Уравнение  Эйлера для функции, минимизирующий функционал
+В рассматриваемом  случае $\dfrac {\partial G}{\partial t}=0$, и
+поэтому из (5) следует $\dfrac {\partial G}{\partial t'}=const.$ 
+Подставляя конкретное значение функции $G,$ получим
+$$
+\left( t'\left( \varphi \right) \right) ^{-3}\dfrac {F\left( \varphi \right) }{6}=const
+$$
+или
+$$
+F\left( \varphi \right) \left( \varphi '\left( t\right) \right) ^{3}=C_{1} \eqno(6)
+$$
+Общее решения этого уравнения завистит от $C_{1}$ и еще и
+некоторой постоянной $C_{2}$. Значения этих постоянныя можно
+определить из граничных  условий $\varphi \left( 0\right) =\left( 0\right) ,\phi \left( 1\right) =1.$ 
+Решение рассмотренной вариационной
+постановки может практически испльзоваться различными способами.
+Например, существуют программы, осуществляющие с=численное
+интегрирование (6) на сетке с шагом, существенно юлдбшим $\dfrac {1}{N},$
+и затем распределяющие узлы в соответствии с полученным решением.
 
+Из соотношения (6) можно сделать тот же  вывод о равенстве оценок
+погрешностей на элементарных отрезках интегрирования при оптимальном
+распределении узлов. В самом деле, умножим (6) на $\dfrac {1}{12N^3},$ положим
+$t=\dfrac {q}{N}$ и заменим $F\left( \varphi \left( \dfrac {q}{N}\right) \right)$
+и $\dfrac {1}{N}\varphi '\left( \dfrac {q}{N}\right) ,$ соответственно, эквивалентными велечинами
+\\ $\max _{\left[ a_{q-1},a_{q}\right] }F\left( x\right) ,a_{q}-a_{q-1}.$ В результате получим 
+$$
+\left( \max _{\left[ a_{q-1},a_{q}\right] }F\left( x\right) \right) \dfrac {\left( a_{q}-a_{q-1}\right) ^{3}}{12}\approx \dfrac {C_{1}}{12N^{3}}. \eqno(7)
+$$
+
+Еще один путь практического истользования управления (6) состоит в следующем.
+Пусть требуется вычислить большую серию интегралов с одиноковым характерным 
+поведением подынтыгральных функций. Выделим простейшую, модельную функцию, для которой задача
+оптимизация узлов может быть решена в явном виде, и далее будем производить
+интегрирование с распределением узлов, соответствующим этой функции. 
+Если характер измерения функции рассматриваемой серии зависит от некоторого 
+параметра, то этот параметр следует учесть при выборе модельной функции; естественно, 
+что модельная функция не обязательно относится к рассматриваему классу. Чем большее 
+число задач предъявляется для решения, тем более могут быть оправданы затраты, 
+связанные с удвчным выбором и расмотрением модельной задачи.
 
 \subsection*{\S 10. Примеры оптимизации распределения узлов}
-Рассмотрим пример решения уравнения (9.6)
+Рассмотрим пример решения уравнения (9.6) для конкретных задач.
+
+П\hspace{3pt}р\hspace{3pt}и\hspace{3pt}м\hspace{3pt}е\hspace{3pt}р 1. Пусть вычисляется серия интегралов
+$$
+I\left( b\right) =\int ^{1}_{0}f\left( b,x\right) dx,
+$$
+$b$ --- параметр серии, $f\left( b,x\right) =x^{b}g\left( b,x\right) ,$ --- $1 <b <2, g\left( b,x\right)$ ---
+гладкая, $g\left( b,0\right) \neq 0.$ Если $b\neq 0,1,$ то вторая производная  $f_{xx}\left( b,x\right)$ не огранияена в окрестности точки 0; при выборе модельной
+задачи следует учесть эту специфику поведения подынтегральной функции. В окрестности $x=0$ имеем
+$$
+f_{xx}\left( b,x\right) =b\left( b-1\right) x^{b-2}g\left( b,0\right) +O\left( x^{b-1}\right)
+$$
+Таким образом, в окрестности точки $x=0$ вторая производная $f_{xx}$ пропорциональна второй производной функции $x^b,$
+поэтому функцию $x^b$ естественно расматривать в качестве модельной. Примим за $F(x)$ велечину 
+$\left| b\left( b-1\right) \right| x^{b-2},$ тогда уравнение (9.6) запишется в виде
+$$
+\left| b\left( b-1\right) \right| \varphi ^{b-2}\left( \dfrac {d\varphi }{dt}\right) ^{3}=C_{1}.
+$$
 
 \end{document}
