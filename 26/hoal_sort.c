@@ -11,6 +11,7 @@ int main(void)
 	while(scanf("%d", &a) == 1) {
 		stack_push(A, a);
 	}
+	putchar('\n');
 	puts("-------------------------");
 	stack_print(A);
 	puts("-------------------------");
