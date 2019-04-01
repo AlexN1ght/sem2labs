@@ -92,15 +92,16 @@ size_t stack_size(Stack *stack)
 	return stack->top;
 }
 
-void stack_concatination(Stack *A, Stack *B)
+void stack_concatenation(Stack *A, Stack *B)
 {
-	A->size = A->top + B->top + 1;
-	A->data = realloc(A->data, A->size * sizeof(data_type));
-	for(int i = 0; i + 1 <= B->top; i++)
-	{
-		A->data[A->top + i] = B->data[i];
+	Stack *T = stack_create();
+	while(!stack_is_empty(B)) {
+		stack_push(T, stack_pop(B));
 	}
-	A->top = A->top + B->top;
+	while(!stack_is_empty(T)) {
+		stack_push(A, stack_pop(T));
+	}
+	stack_delete(&T);
 }
 
 #endif

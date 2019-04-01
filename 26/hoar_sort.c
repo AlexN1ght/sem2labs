@@ -41,8 +41,8 @@ void sort(Stack *A)
 		sort(G);
 	}
 	stack_push(L, key);
-	stack_concatination(L, G);
-	stack_concatination(A, L);
+	stack_concatenation(L, G);
+	stack_concatenation(A, L);
 	stack_delete(&L);
 	stack_delete(&G);
 }
