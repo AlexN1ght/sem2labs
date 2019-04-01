@@ -1,6 +1,8 @@
 *.out
+*.o
 *.aux
 *.log
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.vscode
