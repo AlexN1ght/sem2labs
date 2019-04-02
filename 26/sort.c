@@ -1,25 +1,16 @@
 #include "stack.h"
 #include "sort.h"
 
-void stack_concatination(Stack *A, Stack *B)
+void stack_concatenation(Stack *A, Stack *B)
 {
-	A->size = A->top + B->top + 1;
-	A->data = realloc(A->data, A->size * sizeof(data_type));
-	for(int i = 0; i + 1 <= B->top; i++)
-	{
-		A->data[A->top + i] = B->data[i];
+	Stack *T = stack_create();
+	while(!stack_is_empty(B)) {
+		stack_push(T, stack_pop(B));
 	}
-<<<<<<< HEAD:26/hoar_sort.c
-	putchar('\n');
-	puts("-------------------------");
-	stack_print(A);
-	puts("-------------------------");
-	sort(A);
-	stack_print(A);
-	return 0;	
-=======
-	A->top = A->top + B->top;
->>>>>>> 299ed6d8af1eed78c2eca853f330ecda7be48410:26/sort.c
+	while(!stack_is_empty(T)) {
+		stack_push(A, stack_pop(T));
+	}
+	stack_delete(&T);
 }
 
 
