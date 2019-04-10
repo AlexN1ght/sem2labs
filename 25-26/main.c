@@ -8,33 +8,82 @@ int main(void)
 	int st;
 	int val;
 	Stack *A[10];
+	for (int i = 0; i < 10; i++) {
+		A[i] = NULL;
+	}
 	while (1){
-	scanf("%c %d", &c, &st);
-	switch (c) {
-		case 'c':
-			A[st] = stack_create();
-			break;
-		case 'd':
-			stack_delete(&A[st]);
-			break;
-		case 'i':
-			scanf("%d", &val);
-			stack_push(A[st], val);
-			break;
-		case 'o':
-			stack_pop(A[st]);
-			break;
-		case 's':
-			sort(A[st]);
-			break;
-		case 'p':
-			stack_print(A[st]);
-			break;
-		default:
-			printf("Wrong syntax\n");
-			break;
-	}
-	getchar();
-	}
-	return 0;	
+		scanf("%c", &c);
+		switch (c) {
+			case 'c':
+				scanf("%d", &st);
+				getchar();
+				A[st] = stack_create();
+				break;
+			case 'd':
+				scanf("%d", &st);
+				getchar();
+				if (A[st] != NULL) {
+					stack_delete(&A[st]);
+				} else {
+					printf("Stack dose not exist\n");
+				}
+				break;
+			case 'i':
+				scanf("%d", &st);
+				if (A[st] == NULL) {
+					printf("?\n");
+					break;
+				}
+				while (scanf("%d", &val) == 1) {
+					stack_push(A[st], val);
+					if (getchar() == '\n') {
+						break;
+					}
+				}
+				break;
+			case 'o':
+				scanf("%d", &st);
+				if (A[st] == NULL) {
+					printf("?\n");
+					break;
+				}
+				getchar();
+				if (!stack_is_empty(A[st])) {
+					stack_pop(A[st]);
+				} else {
+					printf("The stack is empty\n");
+				}
+				break;
+			case 's':
+				scanf("%d", &st);
+				if (A[st] == NULL) {
+					printf("?\n");
+					break;
+				}
+				getchar();
+				sort(A[st]);
+				break;
+			case 'p':
+				scanf("%d", &st);
+				if (A[st] == NULL) {
+					printf("?\n");
+					break;
+				}
+				getchar();
+				stack_print(A[st]);
+				break;
+			case 'q':
+				for (int i = 0; i < 10; i++) {
+					if (A[i] != NULL) {
+						stack_delete(&A[i]);
+					}
+				}
+				return 0;
+				break;
+			default:
+				printf("Unknown command\n");
+				break;
+		}
+		//getchar();
+	}	
 }
