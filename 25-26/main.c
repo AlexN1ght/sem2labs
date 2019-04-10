@@ -16,12 +16,10 @@ int main(void)
 		switch (c) {
 			case 'c':
 				scanf("%d", &st);
-				getchar();
 				A[st] = stack_create();
 				break;
 			case 'd':
 				scanf("%d", &st);
-				getchar();
 				if (A[st] != NULL) {
 					stack_delete(&A[st]);
 				} else {
@@ -80,10 +78,13 @@ int main(void)
 				}
 				return 0;
 				break;
+			case ' ':
+				break;
+			case '\n':
+				break;
 			default:
 				printf("Unknown command\n");
 				break;
 		}
-		//getchar();
 	}	
 }
