@@ -1,5 +1,5 @@
-#ifndef _SORT_H_
-#define _SORT_H_
+#ifndef _GTREE_H_
+#define _GTREE_H_
 
 typedef int GTdata;
 
