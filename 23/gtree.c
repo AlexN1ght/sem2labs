@@ -109,18 +109,20 @@ int del_node(GTnode **tree, const char* comm)
 	GTnode **n = node_path(tree, comm);
 	if (n == NULL || tree == NULL) {
 		return 0;
-	} else if (n == tree) {
-		free(*n);
-		*n = NULL;
-		return -1;
 	}
 	if ((*n)->son) {
 		del_node_supp(&((*n)->son));
 	}
 	if ((*n)->brother) {
-		free(*n);
+		GTnode *tmpdel = *n;
 		*n = (*n)->brother;
+		free(tmpdel);
 	} else {
+		if (n == tree) {
+			free(*n);
+			*n = NULL;
+			return -1;
+		}
 		free(*n);
 		*n = NULL;
 	}
