@@ -110,6 +110,8 @@ int del_node(GTnode **tree, const char* comm)
 	if (n == NULL || tree == NULL) {
 		return 0;
 	} else if (n == tree) {
+		free(*n);
+		*n = NULL;
 		return -1;
 	}
 	if ((*n)->son) {
