@@ -45,7 +45,7 @@ int main(void)
 				}
 				break;
 			case add_path:
-				if (c == 's' || c == 'b') {
+				if (c == 's' || c == 'b' || c == 'v') {
 					comm[a] = c;
 					a++;
 				} else if (c == 'r' && !root) {
@@ -67,7 +67,7 @@ int main(void)
 				}
 				break;
 			case delete_node:
-				if (c == 's' || c == 'b' || c == 'r') {
+				if (c == 's' || c == 'b' || c == 'r' || c == 'v') {
 					comm[a] = c;
 					a++;
 				} else if (is_space(c)) {

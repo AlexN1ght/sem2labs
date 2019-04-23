@@ -3,7 +3,7 @@
 #include<stdlib.h>
 #include<limits.h>
 
-GTnode *create_node(int a)
+GTnode *create_node(GTdata a)
 {
   GTnode *node = (GTnode *)malloc(sizeof(GTnode));
   node->data = a;
@@ -31,9 +31,27 @@ GTnode* last_son(GTnode *n)
 	return n;
 }
 
+GTnode** getPathVal(GTnode **node, GTdata key)
+{
+	GTnode **path;
+	if ((*node)->data == key)
+		return node;
+	if ((*node)->son != NULL) {
+		path = getPathVal(&((*node)->son), key);
+        if (path)
+        	return path;
+	}
+	if ((*node)->brother != NULL) {
+		path = getPathVal(&((*node)->brother), key);
+        if (path)
+        	return path;
+	}
+	return NULL;
+}
+
 GTnode* add_node(GTnode **node, const char *a) {
   GTnode* t = *node;
-  int value;
+  GTdata value;
   scanf("%d", &value);
   getchar();
   int i = -1;
@@ -41,7 +59,15 @@ GTnode* add_node(GTnode **node, const char *a) {
         if (a[i] == 'r') {
             *node = create_node(value);
             return *node;
-          }
+        }
+        if (a[i] == 'v') {
+        	GTdata key = value;
+        	scanf("%d", &value);
+        	t = *getPathVal(node, key);
+            if(t)
+           		break;
+           	return NULL;
+        }
         if (a[i] == 's') {
         	t = to_son(t);
         	if (t) {
@@ -75,6 +101,14 @@ GTnode** node_path(GTnode** tree, const char* a)
       	if (a[i] == 'r') {
       		return tree;
       	}
+      	if (a[i] == 'v') {
+        	GTdata key;
+        	scanf("%d", &key);
+        	node = getPathVal(tree, key);
+            if(node)
+           		return node;
+           	return NULL;
+        }
         if (a[i] == 's') {
         	node = &((*node)->son);
         	if (*node == NULL) {
