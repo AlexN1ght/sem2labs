@@ -1,54 +1,136 @@
 #include "Dayk.h"
+#include <stdio.h>
 
-enum state {
-	number;
-	space;
-};
+int is_num(char a);
+int is_alpha(char a);
+int is_op(char a);
+int is_left_a(char a);
+int is_right_a(char a);
+int op_prior(char a);
 
 List* StrToRPN(const char* str)
-
 {
 	List* out = list_create();
 	List* stack = list_create();
-	enum state State = space;
 	char tmp[20];
-	int tmp_itr = 0;
+	char c;
+	int num_itr = 0;
 	for(int i = 0; i < strlen(str); i++) {
 		c = str[i];
-		switch (State) {
-			case number:
-				if(is_num(c)) {
-					tmp[tmp_itr] = c;
-					tmp_itr++;
-					break;
-				} else if(is_bracket(c)) {
-					
-				} else if(is_op1) {
-					
-				} else if(is_op2) {
-				
-				}
-				tmp[tmp_itr] = '\0';
-				tmp_itr = 0;
+		if(is_num(c)) {
+			tmp[num_itr] = c;
+			num_itr++;
+			continue;
+		}else if (num_itr != 0) {
+			tmp[num_itr] = '\0';
+			num_itr = 0;
+			list_push_front(out, tmp);
+		}
+		if(is_alpha(c)){
+			if (i == 0) {
+				tmp[0] = c;
+				tmp[1] = '\0';
 				list_push_front(out, tmp);
-				break;
-			case space:
-				if(is_num(c)) {
-					tmp[tmp_itr] = c;
-					tmp_itr++;
-					break;
-				} else if(is_alpha(c)) {
-				
-				} else if(is_bracket(c)) {
-					
-				} else if(is_op1) {
-					
-				} else if(is_op2) {
-				
+			} else if (is_op(str[i-1]) || str[i-1] == '(') {
+				tmp[0] = c;
+				tmp[1] = '\0';
+				list_push_front(out, tmp);
+			} else {
+				list_destroy(&stack);
+				list_destroy(&out);
+				return NULL;
+			}
+		} else if(c == '(') {
+			tmp[0] = c;
+			tmp[1] = '\0';
+			list_push_front(stack, tmp);
+		} else if(c == ')') {
+			while(list_peak(stack, -1)[0] != '(') {
+				if(list_peak(stack, -1) != NULL) {
+					list_push_front(out, list_pop_front(stack));
+				} else {
+					list_destroy(&stack);
+					list_destroy(&out);
+					return NULL;
 				}
+			}
+			list_pop_front(stack);
+
+		} else if(is_op(c)) {
+			if(c == '-'){
+				if(i == 0){
+					tmp[0] = '0';
+					tmp[1] = '\0';
+					list_push_front(out, tmp);
+				} else if (str[i-1] == '(') {
+					tmp[0] = '0';
+					tmp[1] = '\0';
+					list_push_front(out, tmp);
+				}
+			}
+			if(list_peak(stack, -1) != NULL) {
+				while(is_op(list_peak(stack, -1)[0]) &&\
+						list_peak(stack, -1)[0] != c &&\
+						((is_left_a(c) && op_prior(c) <= op_prior(list_peak(stack, -1)[0])) ||\
+						(is_right_a(c) && op_prior(c) < op_prior(list_peak(stack, -1)[0]) ))) 
+				{
+					list_push_front(out, list_pop_front(stack));
+					if(list_peak(stack, -1) == NULL) {
+						break;
+					}
+				}
+			}
+			tmp[0] = c;
+			tmp[1] = '\0';
+			list_push_front(stack, tmp);
+		}
+
+	}
+	if (num_itr != 0) {
+		tmp[num_itr] = '\0';
+		num_itr = 0;
+		list_push_front(out, tmp);
+	}
+	if(list_peak(stack, -1) != NULL) {
+		while(list_peak(stack, -1)[0] != '(' && list_peak(stack, -1)[0] != ')') {
+			list_push_front(out, list_pop_front(stack));
+			if(list_peak(stack, -1) == NULL) {
 				break;
-			case number:
-				break;
+			}
 		}
 	}
+	list_destroy(&stack);
+	return out;
+}
+
+int is_num(char a)
+{
+	return ((a - '0') >= 0 && (a - '0') <= 9) ? 1 : 0;
+}
+int is_alpha(char a)
+{
+	return (a >= 'A' && a <= 'Z') || (a >= 'a' && a <= 'z') ? 1 : 0;
+}
+int is_op(char a)
+{
+	return a == '+' || a == '-' || a == '*' || a == '/' || a == '^' ? 1 : 0;
+}
+int is_left_a(char a)
+{
+	return a == '+' || a == '-' || a == '*' || a == '/' ? 1 : 0;
+}
+int is_right_a(char a)
+{
+	return a == '^' ? 1 : 0;
+}
+int op_prior(char a)
+{
+	if(a == '+' || a == '-') {
+		return 1;
+	} else if(a == '*' || a == '/') {
+		return 2;
+	} else if(a == '^') {
+		return 3;
+	}
+	return 0;
 }

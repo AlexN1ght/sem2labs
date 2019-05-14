@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "lin-2-list-barrier.h"
+#include <string.h>
+#include "Lin-2-list-barrier.h"
 
 List* list_create(void)
 {
@@ -18,8 +19,8 @@ void list_push_front(List *lst, data_type value)
 {
     Node *Next;
     Next = (Node*)malloc(sizeof(Node));
-    Next->data = (char*)malloc(sizeof(char) * 
-    Next->data = value;
+    Next->data = (char*)malloc(sizeof(char) * (strlen(value) + 1));
+    strcpy(Next->data, value);
     lst->size++;
     Next->prev = (lst->barr)->prev;
     (lst->barr)->prev = Next;
@@ -31,7 +32,8 @@ void list_push_back(List *lst, data_type value)
 {
     Node *Next;
     Next = (Node*)malloc(sizeof(Node));
-    Next->data = value;
+    Next->data = (char*)malloc(sizeof(char) * (strlen(value) + 1));
+    strcpy(Next->data, value);
     lst->size++;
     Next->next = (lst->barr)->next;
     (lst->barr)->next = Next;
@@ -59,7 +61,8 @@ int list_insert(List *lst, int i, data_type value)
 	    }
         Tmp = Tmp->next;
     }
-	Inter->data = value;
+	Inter->data = (char*)malloc(sizeof(char) * (strlen(value) + 1));
+    strcpy(Inter->data, value);
 	Inter->next = Tmp;
 	Inter->prev = Tmp->prev;
 	(Tmp->prev)->next = Inter;
@@ -145,8 +148,7 @@ int list_remove_k(List *lst, int i)
 data_type list_peak(List *lst, int i) 
 {
     if (lst->size == 0) {
-        puts("Error: stack is empty");
-        exit(100);
+        return NULL;
     }
 	Node *Tmp = lst->barr;
     if (i > 0) {
@@ -165,7 +167,7 @@ void list_print(List *lst)
 {
     Node *tmp = (lst->barr)->next;
     for (int i = 0; i < lst->size; i++) {
-        printf("%d ", tmp->data);
+        printf("%s ", tmp->data);
         tmp = tmp->next;
     }
     putchar('\n');
