@@ -5,5 +5,6 @@
 #include "Lin-2-list-barrier.h"
 
 List* StrToRPN(const char*);
+int is_op(char a);
 
 #endif

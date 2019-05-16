@@ -1,5 +1,4 @@
 #include "Dayk.h"
-#include <stdio.h>
 
 int is_num(char a);
 int is_alpha(char a);

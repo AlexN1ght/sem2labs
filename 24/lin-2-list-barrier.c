@@ -84,8 +84,7 @@ data_type list_pop_front(List *lst)
 data_type list_pop_back(List *lst)
 {
     if (lst->size == 0) {
-        puts("Error: stack is empty");
-        exit(100);
+        return NULL;
     }
     data_type tmp = list_peak(lst, 1);
     list_remove(lst, 1);
@@ -180,6 +179,7 @@ void list_destroy(List **lst)
     Node *next = NULL;
     while (tmp != (*lst)->barr) {
         next = tmp->next;
+        free(tmp->data);
         free(tmp);
         tmp = next;
     }
