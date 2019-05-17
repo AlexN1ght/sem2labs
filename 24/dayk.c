@@ -13,8 +13,9 @@ List* StrToRPN(const char* str)
 	List* stack = list_create();
 	char tmp[20];
 	char c;
+	int min = 0;
 	int num_itr = 0;
-	for(int i = 0; i < strlen(str); i++) {
+	for(int i = 0; i < strlen(str) || min == 1; i++) {
 		c = str[i];
 		if(is_num(c)) {
 			tmp[num_itr] = c;
@@ -24,6 +25,11 @@ List* StrToRPN(const char* str)
 			tmp[num_itr] = '\0';
 			num_itr = 0;
 			list_push_front(out, tmp);
+			if(min == 1) {
+				c = ')';
+				i--;
+				min = 0;
+			}
 		}
 		if(is_alpha(c)){
 			if (i == 0) {
@@ -39,7 +45,12 @@ List* StrToRPN(const char* str)
 				list_destroy(&out);
 				return NULL;
 			}
-		} else if(c == '(') {
+			if(min == 1) {
+				c = ')';
+				min = 0;
+			}
+		}
+		if(c == '(') {
 			tmp[0] = c;
 			tmp[1] = '\0';
 			list_push_front(stack, tmp);
@@ -58,13 +69,21 @@ List* StrToRPN(const char* str)
 		} else if(is_op(c)) {
 			if(c == '-'){
 				if(i == 0){
+					tmp[0] = '(';
+					tmp[1] = '\0';
+					list_push_front(stack, tmp);
 					tmp[0] = '0';
 					tmp[1] = '\0';
 					list_push_front(out, tmp);
-				} else if (str[i-1] == '(') {
+					min = 1;
+				} else if (str[i-1] == '(' || str[i-1] == '^') {
+					tmp[0] = '(';
+					tmp[1] = '\0';
+					list_push_front(stack, tmp);
 					tmp[0] = '0';
 					tmp[1] = '\0';
 					list_push_front(out, tmp);
+					min = 1;
 				}
 			}
 			if(list_peak(stack, -1) != NULL) {
