@@ -10,6 +10,8 @@ BTNode* createTree(tree_data_type value)
     return out;
 }
 
+
+
 void addLeftTree(BTNode* tree, BTNode* in)
 {
     tree->left = in;
@@ -22,6 +24,7 @@ void addRightTree(BTNode* tree, BTNode* in)
 
 void printTree(BTNode* tree, int deep)
 {
+    //puts("PRINT");
     if (tree != NULL) {
         for(int i = 0; i < deep; i ++) putchar('\t');
         printf("%s\n", tree->data);
@@ -39,4 +42,31 @@ void treeDestroy(BTNode** tree)
         free(*tree);
         *tree = NULL;
     }
+}
+
+void copyTree(BTNode** out, BTNode* tree)
+{   
+    if(*out != NULL) {
+        treeDestroy(out);
+    }
+    if(tree != NULL) {
+        *out = createTree(tree->data);
+        copyTree(&(*out)->right, tree->right);
+        copyTree(&(*out)->left, tree->left);
+    }
+}
+
+BTNode* getRightSon(BTNode* tree)
+{
+    return tree->right;
+}
+
+BTNode* getLeftSon(BTNode* tree)
+{
+    return tree->left;
+}
+
+tree_data_type getTreeValue(BTNode* tree)
+{
+    return tree->data;
 }

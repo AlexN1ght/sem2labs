@@ -55,7 +55,7 @@ void stack_push(Stack *stack, stack_data_type value)
 stack_data_type stack_pop(Stack *stack)
 {
 	if (stack->top == 0) {
-        exit(STACK_UNDERFLOW);
+        return NULL;
     }
     stack->top--;
     return stack->data[stack->top];

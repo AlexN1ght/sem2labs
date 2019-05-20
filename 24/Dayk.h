@@ -6,5 +6,6 @@
 
 List* StrToRPN(const char*);
 int is_op(char a);
+int is_num(char a);
 
 #endif

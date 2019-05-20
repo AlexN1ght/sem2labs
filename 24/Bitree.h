@@ -14,9 +14,13 @@ typedef struct BTNode{
 } BTNode;
 
 BTNode* createTree(tree_data_type value);
+void copyTree(BTNode** out, BTNode* tree);
 void addLeftTree(BTNode* tree, BTNode* in);
 void addRightTree(BTNode* tree, BTNode* in);
 void printTree(BTNode* tree, int deep);
 void treeDestroy(BTNode** tree);
+BTNode* getRightSon(BTNode* tree);
+BTNode* getLeftSon(BTNode* tree);
+tree_data_type getTreeValue(BTNode* tree);
 
 #endif
