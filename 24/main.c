@@ -465,6 +465,9 @@ void reduceCh(BTNode** polynomial,char ch)
 {
 	puts("reduceCh");
     int min = 1;
+    int minx = 1;
+    int min1 = 1;
+    int min2 = 1;
     char* tmpStr;
     BTNode** ch1T = NULL;
     BTNode** ch2T = NULL;
@@ -491,32 +494,60 @@ void reduceCh(BTNode** polynomial,char ch)
             addLeftTree(powTmp, *ch2T);
             *ch2T = powTmp;
         }
-
-        tmpStr = getTreeValue(getLeftSon(*ch2T));
+        tmpStr = getTreeValue(getLeftSon(*ch1T));
         if(tmpStr[0] == '~') {
-            min *= -1;
+            minx *= -1;
         }
 		
-		//if (is_alpha(getRightSon(*ch1T)) || is_alpha(getRightSon(*ch1T))) {
+		BTNode* tmpT1;
+        BTNode* tmpT2;
+        tmpStr = getTreeValue(getRightSon(*ch1T));
+        if(tmpStr[0] == '~') {
+            min1 *= -1;
+            tmpT1 = getRightSon(getRightSon(*ch1T));
+        } else {
+            tmpT1 = getRightSon(*ch1T);        
+        }
+        
+        tmpStr = getTreeValue(getRightSon(*ch2T));
+        if(tmpStr[0] == '~') {
+            min2 *= -1;
+            tmpT2 = getRightSon(getRightSon(*ch2T));
+        } else {
+            tmpT2 = getRightSon(*ch2T);
+        }
+
 		
-		//}
-		
-        int num1 = atoi(getTreeValue(getRightSon(*ch1T)));
-        int num2 = atoi(getTreeValue(getRightSon(*ch2T)));
+        int num1 = atoi(getTreeValue(tmpT1));
+        int num2 = atoi(getTreeValue(tmpT2));
+        printf("%d %d", num1, num2);
 
         char p[17];
-        itoa(num1 + num2, p);
-        
-        (getRightSon(*ch1T))->data = (char*)realloc((getRightSon(*ch1T))->data, sizeof(char) * (strlen(p) + 1));
-        strcpy(getTreeValue(getRightSon(*ch1T)), p);
+        int tmpRes = num1 * min1 + num2 * min2;
+        if(tmpRes < 0) {
+            tmpRes = -tmpRes;
+            min = -1;
+        }
+        itoa(tmpRes, p);
+        treeDestroy(&(*ch1T)->right);
+        if(min == -1) {
+        	tmpT1 = createTree("~");
+        	addRightTree(tmpT1, createTree(p));
+            addRightTree(*ch1T, tmpT1);
+        } else {
+        	addRightTree(*ch1T, createTree(p));
+        }
         extractNode(polynomial, *ch2T);
-        
+
         ch1T = findChPowInFactorsNE(polynomial, NULL, ch);
     	if(ch1T != NULL) {
         	ch2T = findChPowInFactorsNE(polynomial, *ch1T, ch);
     	}
+        min1 = 1;
+        min2 = 1;
+        min = 1;
     }
-    if(min == -1){
+    if(minx == -1){
         tmpStr = getTreeValue(getRightSon(*ch2T));
         BTNode* tmp = getRightSon(*ch2T);
         if(tmpStr[0] == '~') {
@@ -581,20 +612,15 @@ void reduceMin(BTNode** addend)
 		puts("k");
 		tmpStr = getTreeValue(getRightSon(*addend));
 		if(tmpStr[0] == '+') {
-			puts("k");
 			tmpT= getRightSon(*addend);
 			addRightTree(*addend, NULL);
 			treeDestroy(addend);
-			puts("k");
 			*addend = createTree("-");
 			addRightTree(*addend, getRightSon(tmpT));
 			addLeftTree(*addend, createTree("~"));
-			puts("k");
 			addRightTree(getLeftSon(*addend), getLeftSon(tmpT));
-			puts("k");
 			addLeftTree(tmpT, NULL);
 			addRightTree(tmpT, NULL);
-			puts("k");
 			reduceMin(&((*addend)->left));
 		}
 	}
@@ -665,11 +691,6 @@ void multiplyBranchToAddend(BTNode** polynomial, BTNode* addend)
     BTNode* pop1 = pop1addend(polynomial);
     while(pop1) {
     	reduceMin(&pop1);
-    	puts("--------------------------------");
-    	printTree(pop1, 0);
-    	puts("--------------------------------");
-    
-
         stack_push(pol1, pop1);
         pop1 = pop1addend(polynomial);
     }
@@ -790,12 +811,16 @@ BTNode* RPNtoTree(List* list)
         char* tmp;
         while(list_peak(list, 1) != NULL) {
             tmp = list_pop_back(list);
-            if(is_op(tmp[0])) {
+            if(is_op(tmp[0]) && tmp[0] != '~') {
                 node = createTree(tmp);
                 addRightTree(node,stack_pop(stack));
                 addLeftTree(node,stack_pop(stack));
                 stack_push(stack, node);
             } else if(tmp[0] == '~') {
+                node = createTree(tmp);
+                addRightTree(node,stack_pop(stack));
+                stack_push(stack, node);
+                /*
                 if (list_peak(list, 1) != NULL) {
                     node = createTree(tmp);
                     addRightTree(node,createTree(list_pop_back(list)));
@@ -810,6 +835,7 @@ BTNode* RPNtoTree(List* list)
                     stack_delete(&stack);
                     return NULL;
                 }
+                */
             } else {
                 stack_push(stack, createTree(tmp));
             }
@@ -885,8 +911,8 @@ char* treeToStr(BTNode* tree, char* out) {
 int main (void)
 {
 
-    char* e1 = "b*x^3+b^2";
-    char* e2 = "x+b^3-x^2*8";
+    char* e1 = "b";
+    char* e2 = "b^-3-x";
     char out[1024];
     out[0] = '\0';
     List* e1L = StrToRPN(e1);
@@ -918,4 +944,3 @@ int main (void)
     treeDestroy(&outT);
     return 0;
 }
-   
