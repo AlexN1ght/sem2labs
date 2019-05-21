@@ -81,12 +81,7 @@ List* StrToRPN(const char* string)
 			tmp[0] = c;
 			tmp[1] = '\0';
 			list_push_front(stack, tmp);
-		} else if(c == '~'){
-			tmp[0] = c;
-			tmp[1] = '\0';
-			list_push_front(out, tmp);
 		}
-
 	}
 	if(num_itr != 0) {
 		tmp[num_itr] = '\0';
@@ -115,7 +110,7 @@ int is_alpha(char a)
 }
 int is_op(char a)
 {
-	return a == '+' || a == '-' || a == '*' || a == '/' || a == '^' ? 1 : 0;
+	return a == '+' || a == '-' || a == '*' || a == '/' || a == '^' || a == '~' ? 1 : 0;
 }
 int is_left_a(char a)
 {
@@ -133,6 +128,8 @@ int op_prior(char a)
 		return 2;
 	} else if(a == '^') {
 		return 3;
+	} else if(a == '~') {
+		return 999;
 	}
 	return 0;
 }

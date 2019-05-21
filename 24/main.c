@@ -145,8 +145,6 @@ int GetPowCh(BTNode* tree, char ch)
             return out;
         }
     } else if(tmpStr[0] == '^') {
-        BTNode* tmpTree;
-        tmpTree = getLeftSon(tree);
         tmpStr = getTreeValue(getLeftSon(tree));
         if(tmpStr[0] == ch) {
             tmpStr = getTreeValue(getRightSon(tree));
@@ -498,16 +496,21 @@ void reduceCh(BTNode** polynomial,char ch)
         if(tmpStr[0] == '~') {
             min *= -1;
         }
-
+		
+		//if (is_alpha(getRightSon(*ch1T)) || is_alpha(getRightSon(*ch1T))) {
+		
+		//}
+		
         int num1 = atoi(getTreeValue(getRightSon(*ch1T)));
         int num2 = atoi(getTreeValue(getRightSon(*ch2T)));
 
         char p[17];
         itoa(num1 + num2, p);
+        
         (getRightSon(*ch1T))->data = (char*)realloc((getRightSon(*ch1T))->data, sizeof(char) * (strlen(p) + 1));
         strcpy(getTreeValue(getRightSon(*ch1T)), p);
         extractNode(polynomial, *ch2T);
-        //ch2T = findChPowInFactorsNE(polynomial, *ch1T, ch);
+        
         ch1T = findChPowInFactorsNE(polynomial, NULL, ch);
     	if(ch1T != NULL) {
         	ch2T = findChPowInFactorsNE(polynomial, *ch1T, ch);
@@ -566,6 +569,35 @@ BTNode** findNumInFactorsNE(BTNode** tree, BTNode* eq)
     }
     return NULL;
 
+}
+
+void reduceMin(BTNode** addend)
+{
+	char* tmpStr;
+	BTNode* tmpT;
+	tmpStr = getTreeValue(*addend);
+	puts("k");
+	if(tmpStr[0] == '~') {
+		puts("k");
+		tmpStr = getTreeValue(getRightSon(*addend));
+		if(tmpStr[0] == '+') {
+			puts("k");
+			tmpT= getRightSon(*addend);
+			addRightTree(*addend, NULL);
+			treeDestroy(addend);
+			puts("k");
+			*addend = createTree("-");
+			addRightTree(*addend, getRightSon(tmpT));
+			addLeftTree(*addend, createTree("~"));
+			puts("k");
+			addRightTree(getLeftSon(*addend), getLeftSon(tmpT));
+			puts("k");
+			addLeftTree(tmpT, NULL);
+			addRightTree(tmpT, NULL);
+			puts("k");
+			reduceMin(&((*addend)->left));
+		}
+	}
 }
 
 void reduceNum(BTNode** polynomial,int min)
@@ -632,6 +664,12 @@ void multiplyBranchToAddend(BTNode** polynomial, BTNode* addend)
     Stack* pol2 = stack_create();
     BTNode* pop1 = pop1addend(polynomial);
     while(pop1) {
+    	reduceMin(&pop1);
+    	puts("--------------------------------");
+    	printTree(pop1, 0);
+    	puts("--------------------------------");
+    
+
         stack_push(pol1, pop1);
         pop1 = pop1addend(polynomial);
     }
@@ -658,7 +696,8 @@ void multiplyBranchToAddend(BTNode** polynomial, BTNode* addend)
         addLeftTree(out, pop1);
         pop1 = out;
         reduceNum(&pop1, 1);
-        reduceCh(&pop1, 'x');
+        for(int i = 'a'; i <= 'z'; i++)
+        	reduceCh(&pop1, i);
         if(min == -1) {
             out = createTree("~");
             addRightTree(out, pop1);
@@ -700,7 +739,14 @@ void multiplyBranchToAddend(BTNode** polynomial, BTNode* addend)
     stack_delete (&pol2);
 }
 
-
+/*
+void openBrackets(BTNode** polynomial)
+{
+	char* tmpStr;
+	tmpStr = getTreeValue(addend);
+	
+}
+*/
 
 BTNode* multiplyPolynomialToAddend(BTNode* polynomial, BTNode* addend)
 {	
@@ -719,9 +765,16 @@ BTNode* multiplyPolynomials(BTNode* polynomial1, BTNode* polynomial2)
     BTNode** out = (BTNode**)malloc(sizeof(BTNode**));
     copyTree(&addendsTree, polynomial2);
     BTNode* addend  = pop1addend(&addendsTree);
+    reduceMin(&addend);
+    puts("--------------------------------");
+    printTree(addend, 0);
+    puts("--------------------------------");
+    
+
     *out = multiplyPolynomialToAddend(polynomial1, addend);    
     addend  = pop1addend(&addendsTree);
     while(addend != NULL) {
+    	reduceMin(&addend);
         *tmpT = multiplyPolynomialToAddend(polynomial1, addend);
         *out =  addPolynomials(out, tmpT);
         addend  = pop1addend(&addendsTree);
@@ -775,7 +828,7 @@ char* treeToStr(BTNode* tree, char* out) {
 	tmpStr = getTreeValue(tree);
 	if (tmpStr[0] == '*') {
 		tmpStr = getTreeValue(getLeftSon(tree));
-		if (tmpStr[0] == '-' || tmpStr[0] == '+') {
+		if (tmpStr[0] == '-' || tmpStr[0] == '+' || tmpStr[0] == '~') {
 			strcat(out, "(");
 			treeToStr(getLeftSon(tree), out);
 			strcat(out, ")");
@@ -784,7 +837,7 @@ char* treeToStr(BTNode* tree, char* out) {
 		}
 		strcat(out, "*");
 		tmpStr = getTreeValue(getRightSon(tree));
-		if (tmpStr[0] == '-' || tmpStr[0] == '+') {
+		if (tmpStr[0] == '-' || tmpStr[0] == '+' || tmpStr[0] == '~') {
 			strcat(out, "(");
 			treeToStr(getRightSon(tree), out);
 			strcat(out, ")");
@@ -814,10 +867,15 @@ char* treeToStr(BTNode* tree, char* out) {
 			treeToStr(getRightSon(tree), out);
 		}
 	} else if (tmpStr[0] == '~') {
+		tmpStr = getTreeValue(getRightSon(tree));
+		//if (tmpStr[0] == '*') {
+			//strcat(out, "-");
+		//} else {
 			strcat(out, "-");
 			strcat(out, "(");
 			treeToStr(getRightSon(tree), out);
 			strcat(out, ")");
+		//}
 	} else if (is_num(tmpStr[0]) || is_alpha(tmpStr[0])) {
 		strcat(out, tmpStr);
 	}
@@ -827,8 +885,8 @@ char* treeToStr(BTNode* tree, char* out) {
 int main (void)
 {
 
-    char* e1 = "4*x^7";
-    char* e2 = "x";
+    char* e1 = "b*x^3+b^2";
+    char* e2 = "x+b^3-x^2*8";
     char out[1024];
     out[0] = '\0';
     List* e1L = StrToRPN(e1);
