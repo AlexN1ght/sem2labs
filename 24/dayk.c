@@ -14,6 +14,7 @@ List* StrToRPN(const char* string)
 	char* str = (char*)malloc(sizeof(char) * (strlen(string) + 1));
     strcpy(str, string);
 	char tmp[20];
+	char* tmpC;
 	char c;
 	int num_itr = 0;
 	for(int i = 0; i < strlen(str) - 1; i++) {
@@ -56,14 +57,16 @@ List* StrToRPN(const char* string)
 		} else if(c == ')') {
 			while(list_peak(stack, -1)[0] != '(') {
 				if(list_peak(stack, -1) != NULL) {
-					list_push_front(out, list_pop_front(stack));
+					tmpC = list_pop_front(stack);
+					list_push_front(out, tmpC);
+					free(tmpC);
 				} else {
 					list_destroy(&stack);
 					list_destroy(&out);
 					return NULL;
 				}
 			}
-			list_pop_front(stack);
+			free(list_pop_front(stack));
 
 		} else if(is_op(c)) {
 			if(list_peak(stack, -1) != NULL) {
@@ -72,7 +75,9 @@ List* StrToRPN(const char* string)
 						((is_left_a(c) && op_prior(c) <= op_prior(list_peak(stack, -1)[0])) ||\
 						(is_right_a(c) && op_prior(c) < op_prior(list_peak(stack, -1)[0]) ))) 
 				{
-					list_push_front(out, list_pop_front(stack));
+					tmpC = list_pop_front(stack);
+					list_push_front(out, tmpC);
+					free(tmpC);
 					if(list_peak(stack, -1) == NULL) {
 						break;
 					}
@@ -90,12 +95,15 @@ List* StrToRPN(const char* string)
 	}
 	if(list_peak(stack, -1) != NULL) {
 		while(list_peak(stack, -1)[0] != '(' && list_peak(stack, -1)[0] != ')') {
-			list_push_front(out, list_pop_front(stack));
+			tmpC = list_pop_front(stack);
+			list_push_front(out, tmpC);
+			free(tmpC);
 			if(list_peak(stack, -1) == NULL) {
 				break;
 			}
 		}
 	}
+	free(str);
 	list_destroy(&stack);
 	return out;
 }
