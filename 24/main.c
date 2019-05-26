@@ -58,28 +58,16 @@ BTNode* pop1addend(BTNode** tree)
                 tmpTreeL = createTree("~");
                 addRightTree(tmpTreeL, tmpTreeR);
                 return tmpTreeL;
-        	} else {
-        		tmpTreeL = getLeftSon(*tree);
-            	tmpStr = getTreeValue(tmpTreeL);
-        		if(tmpStr[0] != '+' && tmpStr[0] != '-') {
-                	tmpTreeR = getRightSon(*tree);
-                	addLeftTree(*tree, NULL);
-                	addRightTree(*tree, NULL);
-                	treeDestroy(tree);
-                	*tree = createTree("~");
-                	addRightTree(*tree, tmpTreeR);
-                return tmpTreeL;
-                } else {
-            		tmpTreeR = pop1addend(&((*tree)->right));
-            		if(tmpTreeR) {
-            			return tmpTreeR;
-            		}
-            		tmpTreeL = pop1addend(&((*tree)->left));
-            		if(tmpTreeL) {
-            			return tmpTreeL;
-            		}
-            	}
-        	}  
+            } else {
+                tmpTreeR = pop1addend(&((*tree)->right));
+                if(tmpTreeR) {
+                    return tmpTreeR;
+                }
+                tmpTreeL = pop1addend(&((*tree)->left));
+                if(tmpTreeL) {
+                    return tmpTreeL;
+                }
+            }
         } else {
             BTNode* tmpTree = *tree;
             *tree = NULL;
